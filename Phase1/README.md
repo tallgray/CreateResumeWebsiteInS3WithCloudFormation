@@ -36,7 +36,7 @@ CreateResumeWebsiteInS3WithCloudFormation/
 
 Docker Compose is a tool for defining and running multi-container applications. It is the key to unlocking a streamlined and efficient development and deployment experience. We need to create the WordPress app to ceate the *RESUME* we plan to host in S3. WordPress is an open-source content management system (CMS). Composed of Apache, PHP, and a relational database (MariaDB, MySQL), it's a popular tool for individuals without any coding experience who want to build websites and blogs. The software doesn't cost anything. Anyone can install, use, and modify it for free. **Yes**, WordPress can run on a single container, but this deployment composition will give us more practice with multi-container scenarios.
 
-> Shortcut: get WordPress buildspec YAML file [here](https://github.com/Tiamatt/StaticWebsiteHostingToS3/blob/main/frontend/app-for-aws/buildspec.yml).
+> Shortcut: get WordPress buildspec YAML file for Docker Compose [here](https://github.com/tallgray/CreateResumeWebsiteInS3WithCloudFormation/blob/main/Phase1/docker-compose.yml).
 
 Before we jump into breaking down the Docker Compose file let's quickly cover environment variables. A dotenv file, also known as an environment file, is a text file that stores key-value pairs of environment variables. The format of a dotenv file is based on bash files that export environment variables. In Docker Compose, an ``.env`` file is used to define environment variables that should be available to Docker containers when running ``docker compose up``. The docker-compose.yml file recognizes and looks for items formated with special characters ```${}```, and resolves them to the value in the dotenv file:
 
