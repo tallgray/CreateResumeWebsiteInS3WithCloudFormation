@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.3.0
+    container_name:  wp-db
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    env_file: .env
+    environment:
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_PASSWORD: '${MYSQL_PASSWORD}'
+      MYSQL_DATABASE: '${DB_NAME}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+    volumes: 
+      - dbdata:/var/lib/mysql
+    command: 'mysqld --authentication_policy=caching_sha2_password'
+    networks:
+      WP-net:
+
+  wordpress:
+    depends_on: 
+      - db
+    image: wordpress:6.4.2-apache
+    container_name: wp-wordpress
+    restart: unless-stopped
+    ports:
+      - 80:80
+    env_file: .env
+    environment:
+      WORDPRESS_DB_HOST: 'wp-db:3306'
+      WORDPRESS_DB_NAME: '${DB_NAME}'
+      WORDPRESS_DB_USER: '${MYSQL_USER}'
+      WORDPRESS_DB_PASSWORD: '${MYSQL_PASSWORD}'
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      WP-net:
+      LAN:
+        ipv4_address: '${WEBSERVER_IPV4}'
+
+  ## Optional Service
+  phpmyadmin:
+    depends_on: 
+      - db
+    image: phpmyadmin/phpmyadmin
+    container_name:  wp-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8081:80
+    env_file: .env
+    environment:
+      PMA_HOST: wp-db
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+    networks:
+      WP-net:
+
+networks:
+  WP-net:
+    driver: bridge
+  LAN:
+    external: true
+
+volumes:
+  wordpress:
+  dbdata:
