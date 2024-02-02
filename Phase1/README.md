@@ -2,7 +2,7 @@
 
 ## **Overview**
 ### We are going to deploy a static website to S3 via AWS CloudFormation in three easy steps: 
- 1. Create WordPress server in Docker, and theme templated static resume website
+ 1. Begin by creating a WordPress server within Docker and crafting a themed, static resume website.
  2. Create S3 bucket configured to host static WordPress resume website and its policy, using CloudFormation
  3. Export and deploy the static WordPress resume website manually to newly created S3 bucket
 
@@ -11,7 +11,7 @@
 ![Resume Website-1](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-resumeSite1_half.jpg)
 
 ## **Architecture**
-The high-level architecture for our project is illustrated in the diagram below:
+Below, you'll find a high-quality illustration depicting the architectural overview of our project.
 
 ![Image description](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-diagram1.png)
 
@@ -34,11 +34,11 @@ CreateResumeWebsiteInS3WithCloudFormation/
 
 ## **Step 1. Create WordPress server in Docker**
 
-Docker Compose is a tool for defining and running multi-container applications. It is the key to unlocking a streamlined and efficient development and deployment experience. We need to create the WordPress app to ceate the *RESUME* we plan to host in S3. WordPress is an open-source content management system (CMS). Composed of Apache, PHP, and a relational database (MariaDB, MySQL), it's a popular tool for individuals without any coding experience who want to build websites and blogs. The software doesn't cost anything. Anyone can install, use, and modify it for free. **Yes**, WordPress can run on a single container, but this deployment composition will give us more practice with multi-container scenarios.
+Docker Compose, a utility for defining and managing multi-container applications, plays a key role in our process. It is the key to unlocking a streamlined and efficient development and deployment experience. We need to create the WordPress app to ceate the *RESUME* we plan to host in S3. WordPress is an open-source content management system (CMS). Composed of Apache, PHP, and a relational database (MariaDB, MySQL), it's a popular tool for individuals without any coding experience who want to build websites and blogs. The software doesn't cost anything. Anyone can install, use, and modify it for free. **Yes**, WordPress can run on a single container, but this deployment composition will give us more practice with multi-container scenarios.
 
 > Shortcut: get WordPress buildspec YAML file for Docker Compose [here](https://github.com/tallgray/CreateResumeWebsiteInS3WithCloudFormation/blob/main/Phase1/docker-compose.yml).
 
-Before we jump into breaking down the Docker Compose file let's quickly cover environment variables. A dotenv file, also known as an environment file, is a text file that stores key-value pairs of environment variables. The format of a dotenv file is based on bash files that export environment variables. In Docker Compose, an ``.env`` file is used to define environment variables that should be available to Docker containers when running ``docker compose up``. The docker-compose.yml file recognizes and looks for items formated with special characters ```${}```, and resolves them to the value in the dotenv file:
+Before we jump into breaking down the Docker Compose file let's quickly cover environment variables. A dotenv file, also known as an environment file, is a text file that stores key-value pairs of environment variables. The format of a dotenv file is based on bash files that export environment variables. Docker Compose utilizes an `.env` file to specify essential environment variables that should be available to Docker containers when running ``docker compose up``. The docker-compose.yml file recognizes and looks for items formated with special characters ```${}```, and resolves them to the value in the dotenv file:
 
 ```DB_NAME=wordpress
 MYSQL_USER=my-username
@@ -149,13 +149,13 @@ tallgray1@docker-1:/mnt/IT$ docker ps | grep wp
 
 Assuming your ```docker ps | grep wp``` output looks similar to the above, your *wp-wordpress* container is up and listending on whichever IP was assigned/designated via the docker compose process. If you're lost and the status of your apperatus is not copasetic, use ```docker network inspect LAN``` and ```docker logs wp-wordpress```, ```docker logs wp-db``` to help work through your issue.
 
-Assuming things are working as expected, login to your WordPress site by typing in the IP for your server and add /wp-admin/ to the end. For example, the login url for our test side is http://10.10.0.64/wp-admin/. You should then walk through the following series:
+Assuming things are working as expected, login to your WordPress site by typing in the IP for your server and add /wp-admin/ to the end. For example, the login url for our test site would be http://10.10.0.64/wp-admin/. You should then walk through the following series:
 ![Install Wordpress1](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-wordpress1.png)
 ![Install Wordpress2](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-wordpress2.png)
 ![Install Wordpress3](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-wordpress3.png)
 ![Install Wordpress4](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-wordpress4.png)
 
-If you've made it this far, **CONGRADULATIONS**! Let's continue by adding some WordPress plugins and buy a template that we would like to model our RESUME presentation.
+If you've made it this far, **CONGRATULATIONS**! Let's continue by adding some WordPress plugins and buy a template that we would like to model our RESUME presentation.
 
 There's a bajillion plugins out there, but we're going to select just two: 
 1. Elementor 
@@ -177,7 +177,7 @@ Locate the plugin on the WordPressh dashboard and select
 View the Activity Log and select Click here to download
 ![Simply Static Download](https://s3.amazonaws.com/tallgray.info/uploads/articles/Phase1-generateSimplyStatic1.jpg)
 
-This will produce a .zip file, which you will then need to decompress. That's it! Our static resume website is ready to publish. Let's move on to creating the S3 Buckets where soon, we'll drop our website.
+This will produce a .zip file, which you will then need to decompress. That's it! Our static resume website is ready to publish. Now, let's progress to the creation of S3 Buckets—the eventual home for our website.
 
 ## **Step 2. Create S3 Bucket with CloudFormation**
 For those that started reading, then decided LT;DR, and jumped to this section - the moment has arrived. It's time to make CloudFormation work, so go ahead, copy-n-paste the code below. For those that are still reading, let's review why we're taking the Infrastructure-as-Code approach in the first place. Well, it provides several advantages:
